@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر للكمبيوتر و ملحقاته</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- رأس الصفحة -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-laptop-code"></i>
+                <span>تكنو لاب</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#brands">العلامات التجارية</a></li>
+                    <li><a href="#products">المنتجات</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- البانر الرئيسي -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>أفضل أجهزة الكمبيوتر بأعلى المواصفات</h1>
+            <p>اكتشف أحدث أجهزة الكمبيوتر المحمولة والمكتبية من أفضل العلامات التجارية العالمية بأسعار تنافسية</p>
+        </div>
+    </section>
+
+    <!-- قسم العلامات التجارية -->
+    <section class="brands" id="brands">
+        <div class="container">
+            <h2 class="section-title">العلامات التجارية</h2>
+            <div class="brands-container">
+                <div class="brand" data-brand="apple">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png" alt="Apple">
+                    <h3>Apple</h3>
+                </div>
+                <div class="brand" data-brand="dell">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dell_logo_2016.svg/800px-Dell_logo_2016.svg.png" alt="Dell">
+                    <h3>Dell</h3>
+                </div>
+                <div class="brand" data-brand="hp">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/800px-HP_logo_2012.svg.png" alt="HP">
+                    <h3>HP</h3>
+                </div>
+                <div class="brand" data-brand="lenovo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Lenovo_logo_2023.svg/320px-Lenovo_logo_2023.svg.png" alt="Lenovo">
+                    <h3>Lenovo</h3>
+                </div>
+                <div class="brand" data-brand="asus">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Asus_logo_2.svg/320px-Asus_logo_2.svg.png" alt="Asus">
+                    <h3>Asus</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المنتجات -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">منتجاتنا</h2>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="apple">Apple</button>
+                <button class="filter-btn" data-filter="dell">Dell</button>
+                <button class="filter-btn" data-filter="hp">HP</button>
+                <button class="filter-btn" data-filter="lenovo">Lenovo</button>
+                <button class="filter-btn" data-filter="asus">Asus</button>
+            </div>
+            
+            <div class="products-grid" id="products-container">
+                <!-- سيتم إضافة المنتجات ديناميكيًا باستخدام JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التواصل -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">تواصل معنا</h2>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>معلومات التواصل</h3>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>العنوان</h4>
+                            <p>شارع الملك عبدالعزيز، الرياض، المملكة العربية السعودية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>الهاتف</h4>
+                            <p>+966 11 123 4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>البريد الإلكتروني</h4>
+                            <p>mohamedelnil11@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>ساعات العمل</h4>
+                            <p>الأحد - الخميس: 9 صباحاً - 10 مساءً</p>
+                            <p>الجمعة - السبت: 4 مساءً - 10 مساءً</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.063232798986!2d46.67265337599662!3d24.725468578067417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sKing%20Abdulaziz%20Rd%2C%20Riyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1686229532585!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">
+                <i class="fas fa-laptop-code"></i>
+                <span>تكنو لاب</span>
+            </div>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>&copy; 2025 جميع الحقوق محفوظة - متجر تكنو لاب</p>
+        </div>
+        <div class="container footer-bottom clearfix">
+        <div class="copyright">
+        <!--&copy; <strong><span>Copyright</span> <strong class="px-1 sitename">Mr.Developer</strong> <span>All Rights Reserved</span>-->
+        </div>
+
+        <div class="credits">
+        Designed by <a href="https://me-one-blue.vercel.app/about.html">Mr.Mohamed Elnil</a>
+    </footer>
+
+    <!-- نافذة تفاصيل المنتج -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <div class="modal-body" id="modal-body">
+                <!-- سيتم ملء المحتوى ديناميكيًا -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
