@@ -85,7 +85,7 @@ const products = [
         title: "MacBook Air M2",
         brand: "apple",
         price: 5999,
-        image: "https://images.unsplash.com/photo-1629131726695-4b4f37c373b7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&q=80",
+        image: "MacBook Air M2.png",
         description: "MacBook Air مع شريحة M2 - تصميم رفيع وأداء مذهل مع بطارية تدوم طوال اليوم.",
         specs: {
             "الشاشة": "13.6 بوصة",
