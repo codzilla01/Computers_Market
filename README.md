@@ -14,5 +14,3 @@
 - HTML5
 - CSS3
 - JavaScript
-
-## هيكل الملفات
