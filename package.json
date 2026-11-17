@@ -1,0 +1,32 @@
+{
+  "name": "computers-market",
+  "version": "2.0.0",
+  "description": "متجر إلكتروني متكامل لأجهزة الكمبيوتر وملحقاتها مع سلة مشتريات ولوحة تحكم وإدارة طلبات",
+  "main": "server.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node tests/api.test.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "computers",
+    "store",
+    "arabic",
+    "rtl",
+    "sqlite",
+    "express"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "multer": "^2.0.2"
+  }
+}

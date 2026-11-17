@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تِك ماركت للكمبيوتر | متجر إلكتروني متكامل لأجهزة الكمبيوتر وملحقاتها</title>
+  <meta name="description" content="تسوّق أحدث أجهزة اللابتوب والكمبيوتر المكتبي وأجهزة الألعاب من Apple وDell وHP وLenovo وASUS وMSI بضمان رسمي سنتين وشحن سريع لجميع مدن المملكة.">
+  <meta property="og:title" content="تِك ماركت للكمبيوتر | متجر أجهزة الكمبيوتر وملحقاتها">
+  <meta property="og:description" content="أفضل أجهزة الكمبيوتر المحمولة والمكتبية وأجهزة الألعاب بضمان رسمي سنتين وتوصيل سريع.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/assets/images/hero-banner.jpg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- شريط الإعلانات العلوي -->
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <span>شحن مجاني للطلبات فوق <strong id="top-free-shipping">1,500</strong> ر.س • ضمان الوكيل الرسمي سنتين</span>
+      <button type="button" class="promo-pill" id="copy-promo-btn" title="اضغط لنسخ كود الخصم">
+        كود خصم 10%: <strong>SAVE10</strong>
+      </button>
+    </div>
+  </div>
+
+  <!-- رأس الصفحة -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="header-right">
+        <button type="button" class="icon-btn mobile-menu-btn" id="mobile-menu-btn" aria-label="فتح القائمة">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <a href="#home" class="brand-logo">
+          <span class="brand-logo-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/><polyline points="9 9 7 11 9 13"/><polyline points="15 9 17 11 15 13"/></svg>
+          </span>
+          <span class="brand-logo-text" id="header-store-name">تِك ماركت للكمبيوتر</span>
+        </a>
+      </div>
+
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <ul>
+          <li><a href="#home">الرئيسية</a></li>
+          <li><a href="#brands">العلامات التجارية</a></li>
+          <li><a href="#products">المنتجات</a></li>
+          <li><a href="#track-order">تتبع الطلب</a></li>
+          <li><a href="#contact">تواصل معنا</a></li>
+          <li><a href="/policies">السياسات</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/admin" class="header-admin-link" title="لوحة إدارة المتجر">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          <span>لوحة الإدارة</span>
+        </a>
+
+        <button type="button" class="icon-btn" id="wishlist-filter-btn" aria-label="عرض المفضلة" title="المفضلة">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="badge-count" id="wishlist-count">0</span>
+        </button>
+
+        <button type="button" class="cart-trigger-btn" id="open-cart-btn" aria-label="فتح سلة المشتريات">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-trigger-label">السلة</span>
+          <span class="badge-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- قائمة الجوال الجانبية -->
+  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="القائمة الجانبية">
+    <div class="mobile-drawer-header">
+      <strong>القائمة الرئيسية</strong>
+      <button type="button" class="icon-btn" id="close-mobile-menu" aria-label="إغلاق القائمة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="#home">الرئيسية</a></li>
+      <li><a href="#brands">العلامات التجارية</a></li>
+      <li><a href="#products">المنتجات</a></li>
+      <li><a href="#track-order">تتبع الطلب</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+      <li><a href="/policies">السياسات والضمان</a></li>
+      <li><a href="/admin" class="mobile-admin-link">الدخول إلى لوحة الإدارة</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- القسم الرئيسي Hero -->
+    <section class="hero" id="home">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <div class="hero-badge">إصدارات 2026 المعتمدة • ضمان رسمي سنتين</div>
+        <h1>أقوى أجهزة الكمبيوتر واللابتوب بأفضل الأسعار</h1>
+        <p id="hero-tagline">اكتشف أحدث الأجهزة المحمولة وأجهزة الأعمال وتجميعات الألعاب الاحترافية من كبرى العلامات العالمية مع توصيل سريع لجميع مدن المملكة.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary btn-lg">تصفح المنتجات الآن</a>
+          <a href="#track-order" class="btn btn-glass btn-lg">تتبع طلبك</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- شريط المزايا والثقة -->
+    <section class="trust-strip" aria-label="مزايا المتجر">
+      <div class="container trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div>
+            <strong>ضمان رسمي سنتين</strong>
+            <span>جميع الأجهزة أصلية بضمان الوكيل</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div>
+            <strong>شحن سريع ومؤمّن</strong>
+            <span>توصيل خلال 1-3 أيام عمل لجميع المدن</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div>
+            <strong>خيارات دفع متعددة</strong>
+            <span>مدى، فيزا، تحويل بنكي، أو عند الاستلام</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </div>
+          <div>
+            <strong>استبدال واسترجاع مرن</strong>
+            <span>خلال 14 يوماً وفق شروط الضمان</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم العلامات التجارية -->
+    <section class="section brands-section" id="brands">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">شركاء الجودة</span>
+          <h2 class="section-title">تسوّق حسب العلامة التجارية</h2>
+          <p class="section-subtitle">اضغط على أي علامة تجارية لعرض أجهزتها المتوفرة فوراً</p>
+        </div>
+
+        <div class="brands-grid" id="brands-grid">
+          <button type="button" class="brand-card" data-brand="apple">
+            <span class="brand-mark">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.32c.68-.83 1.14-1.98 1.01-3.12-.98.04-2.17.65-2.87 1.48-.62.72-1.17 1.89-1.02 3.01 1.1.08 2.2-.55 2.88-1.37z"/></svg>
+            </span>
+            <span class="brand-name">Apple</span>
+          </button>
+
+          <button type="button" class="brand-card" data-brand="dell">
+            <span class="brand-mark brand-text-logo" style="color:#007db8;">DELL</span>
+            <span class="brand-name">Dell</span>
+          </button>
+
+          <button type="button" class="brand-card" data-brand="hp">
+            <span class="brand-mark brand-circle-logo" style="background:#0096d6;">hp</span>
+            <span class="brand-name">HP</span>
+          </button>
+
+          <button type="button" class="brand-card" data-brand="lenovo">
+            <span class="brand-mark brand-box-logo" style="background:#e2231a;">Lenovo</span>
+            <span class="brand-name">Lenovo</span>
+          </button>
+
+          <button type="button" class="brand-card" data-brand="asus">
+            <span class="brand-mark brand-text-logo" style="color:#0f172a;letter-spacing:2px;">ASUS</span>
+            <span class="brand-name">ASUS</span>
+          </button>
+
+          <button type="button" class="brand-card" data-brand="msi">
+            <span class="brand-mark brand-text-logo" style="color:#dc2626;letter-spacing:2px;">MSI</span>
+            <span class="brand-name">MSI</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم المنتجات والكتالوج -->
+    <section class="section products-section" id="products">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">كتالوج الأجهزة</span>
+          <h2 class="section-title">أحدث الأجهزة المتوفرة</h2>
+        </div>
+
+        <!-- فلاتر الفئات -->
+        <div class="category-tabs" id="category-tabs" role="tablist" aria-label="تصفية حسب الفئة">
+          <button type="button" class="cat-tab active" data-category="all">جميع الأجهزة</button>
+          <button type="button" class="cat-tab" data-category="laptops">لابتوب</button>
+          <button type="button" class="cat-tab" data-category="business">أجهزة أعمال</button>
+          <button type="button" class="cat-tab" data-category="gaming">ألعاب</button>
+          <button type="button" class="cat-tab" data-category="desktops">أجهزة مكتبية</button>
+          <button type="button" class="cat-tab" data-category="accessories">ملحقات وشاشات</button>
+        </div>
+
+        <!-- شريط البحث والفرز -->
+        <div class="catalog-toolbar">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="search-input" placeholder="ابحث باسم الجهاز، المعالج، الذاكرة، أو الرمز..." aria-label="البحث عن المنتجات">
+          </div>
+
+          <div class="toolbar-controls">
+            <select id="brand-select" aria-label="تصفية حسب العلامة التجارية">
+              <option value="all">كل العلامات التجارية</option>
+              <option value="apple">Apple</option>
+              <option value="dell">Dell</option>
+              <option value="hp">HP</option>
+              <option value="lenovo">Lenovo</option>
+              <option value="asus">ASUS</option>
+              <option value="msi">MSI</option>
+            </select>
+
+            <select id="sort-select" aria-label="ترتيب المنتجات">
+              <option value="featured">الترتيب: المميزة</option>
+              <option value="price_asc">السعر: من الأقل للأعلى</option>
+              <option value="price_desc">السعر: من الأعلى للأقل</option>
+              <option value="rating">الأعلى تقييماً</option>
+              <option value="newest">الأحدث إضافة</option>
+            </select>
+
+            <label class="stock-toggle">
+              <input type="checkbox" id="in-stock-only">
+              <span>المتوفر فقط</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="catalog-meta">
+          <span id="results-count">جاري تحميل المنتجات...</span>
+          <button type="button" class="link-btn hidden" id="reset-filters-btn">إعادة ضبط الفلاتر</button>
+        </div>
+
+        <!-- شبكة المنتجات -->
+        <div class="products-grid" id="products-grid"></div>
+      </div>
+    </section>
+
+    <!-- قسم تتبع الطلب -->
+    <section class="section track-section" id="track-order">
+      <div class="container">
+        <div class="track-card">
+          <div class="track-intro">
+            <span class="section-eyebrow">خدمة العملاء</span>
+            <h2>تتبع حالة طلبك لحظياً</h2>
+            <p>أدخل رقم الطلب لمعرفة حالة التجهيز والشحن وموعد التوصيل المتوقع.</p>
+            <div class="demo-track-hint">
+              جرّب رقم طلب تجريبي:
+              <button type="button" class="demo-code-chip" data-track-demo="CM-2026-1001">CM-2026-1001</button>
+              <button type="button" class="demo-code-chip" data-track-demo="CM-2026-1002">CM-2026-1002</button>
+              <button type="button" class="demo-code-chip" data-track-demo="CM-2026-1003">CM-2026-1003</button>
+            </div>
+          </div>
+
+          <form class="track-form" id="track-order-form">
+            <div class="form-row">
+              <input type="text" id="track-order-number" placeholder="رقم الطلب (مثال: CM-2026-1001)" required>
+              <input type="tel" id="track-order-phone" placeholder="رقم الجوال (اختياري للتحقق)">
+              <button type="submit" class="btn btn-primary">تتبع الطلب</button>
+            </div>
+          </form>
+
+          <div class="track-result hidden" id="track-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم التواصل -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">نحن هنا لمساعدتك</span>
+          <h2 class="section-title">تواصل معنا</h2>
+          <p class="section-subtitle">لديك استفسار عن مواصفات جهاز أو طلب عرض سعر للشركات؟ أرسل لنا رسالتك وسنرد عليك سريعاً.</p>
+        </div>
+
+        <div class="contact-layout">
+          <form class="contact-form-card" id="contact-form">
+            <h3>أرسل رسالة مباشرة</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="contact-name">الاسم الكامل *</label>
+                <input type="text" id="contact-name" required placeholder="محمد العتيبي">
+              </div>
+              <div class="form-group">
+                <label for="contact-phone">رقم الجوال</label>
+                <input type="tel" id="contact-phone" placeholder="05XXXXXXXX">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="contact-email">البريد الإلكتروني *</label>
+                <input type="email" id="contact-email" required placeholder="name@example.com">
+              </div>
+              <div class="form-group">
+                <label for="contact-subject">الموضوع *</label>
+                <input type="text" id="contact-subject" required placeholder="استفسار عن جهاز / عرض سعر">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-body">الرسالة *</label>
+              <textarea id="contact-body" rows="4" required placeholder="اكتب تفاصيل استفسارك هنا..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="contact-submit-btn">إرسال الرسالة</button>
+          </form>
+
+          <div class="contact-side">
+            <div class="contact-info-card">
+              <h3>بيانات المتجر</h3>
+              <ul class="contact-list">
+                <li>
+                  <span class="contact-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  </span>
+                  <div>
+                    <strong>العنوان</strong>
+                    <p id="store-address">طريق الملك فهد، حي العليا، الرياض، المملكة العربية السعودية</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="contact-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </span>
+                  <div>
+                    <strong>الهاتف والمبيعات</strong>
+                    <p dir="ltr" class="ltr-text" id="store-phone">+966 11 456 7890</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="contact-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </span>
+                  <div>
+                    <strong>البريد الإلكتروني</strong>
+                    <p id="store-email">sales@techmarket.sa</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="contact-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </span>
+                  <div>
+                    <strong>ساعات العمل</strong>
+                    <p id="store-hours-weekdays">الأحد - الخميس: 9:00 صباحاً - 10:00 مساءً</p>
+                    <p id="store-hours-weekend">الجمعة - السبت: 4:00 مساءً - 10:00 مساءً</p>
+                  </div>
+                </li>
+              </ul>
+
+              <a href="#" id="whatsapp-direct-link" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-full">
+                تواصل مباشر عبر واتساب
+              </a>
+            </div>
+
+            <div class="map-card">
+              <iframe
+                title="موقع المتجر على الخريطة"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.063232798986!2d46.67265337599662!3d24.725468578067417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sKing%20Abdulaziz%20Rd%2C%20Riyadh%20Saudi%20Arabia!5e0!3m2!1sar!2ssa!4v1686229532585!5m2!1sar!2ssa"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- التذييل -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="#home" class="brand-logo footer-logo">
+          <span class="brand-logo-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          </span>
+          <span id="footer-store-name">تِك ماركت للكمبيوتر</span>
+        </a>
+        <p class="footer-bio">وجهتك الموثوقة لشراء أحدث أجهزة الكمبيوتر واللابتوب وتجميعات الألعاب الاحترافية بضمان رسمي وخدمة ما بعد البيع.</p>
+        <div class="social-row">
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="حساب X">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="حساب إنستغرام">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="قناة يوتيوب">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="#products">تصفح المنتجات</a></li>
+          <li><a href="#brands">العلامات التجارية</a></li>
+          <li><a href="#track-order">تتبع طلبك</a></li>
+          <li><a href="#contact">تواصل معنا</a></li>
+          <li><a href="/admin">لوحة إدارة المتجر</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>السياسات والضمان</h4>
+        <ul>
+          <li><a href="/policies#warranty">سياسة الضمان والصيانة</a></li>
+          <li><a href="/policies#returns">سياسة الاستبدال والاسترجاع</a></li>
+          <li><a href="/policies#shipping">سياسة الشحن والتوصيل</a></li>
+          <li><a href="/policies#privacy">سياسة الخصوصية والأمان</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>وسائل الدفع المقبولة</h4>
+        <div class="payment-badges">
+          <span class="pay-badge">مدى</span>
+          <span class="pay-badge">Visa</span>
+          <span class="pay-badge">Mastercard</span>
+          <span class="pay-badge">تحويل بنكي</span>
+          <span class="pay-badge">عند الاستلام</span>
+        </div>
+        <p class="footer-vat-note">جميع الأسعار تخضع لضريبة القيمة المضافة وفق النظام السعودي وتصدر فاتورة إلكترونية لكل طلب.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 <span id="footer-copy-name">تِك ماركت للكمبيوتر</span> — جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- نافذة تفاصيل المنتج -->
+  <div class="modal-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
+    <div class="modal-dialog modal-lg">
+      <button type="button" class="modal-close-btn" id="close-product-modal" aria-label="إغلاق">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="product-modal-body" id="product-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- الدرج الجانبي لسلة المشتريات -->
+  <div class="drawer-backdrop" id="cart-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="سلة المشتريات">
+    <div class="cart-drawer-header">
+      <div>
+        <h3>سلة المشتريات</h3>
+        <span class="cart-subtitle" id="cart-items-subtitle">0 منتجات</span>
+      </div>
+      <button type="button" class="icon-btn" id="close-cart-btn" aria-label="إغلاق السلة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="free-shipping-bar" id="free-shipping-bar">
+      <p id="free-shipping-text"></p>
+      <div class="progress-track"><div class="progress-fill" id="free-shipping-progress"></div></div>
+    </div>
+
+    <div class="cart-items-list" id="cart-items-list"></div>
+
+    <div class="cart-drawer-footer" id="cart-footer">
+      <div class="coupon-box">
+        <input type="text" id="coupon-input" placeholder="أدخل كود الخصم (مثال: SAVE10)">
+        <button type="button" class="btn btn-outline-sm" id="apply-coupon-btn">تطبيق</button>
+      </div>
+      <div class="applied-coupon hidden" id="applied-coupon-banner">
+        <span id="applied-coupon-text"></span>
+        <button type="button" class="link-btn danger" id="remove-coupon-btn">إزالة</button>
+      </div>
+
+      <div class="cart-summary-rows">
+        <div class="summary-row"><span>المجموع الفرعي</span><strong id="cart-subtotal">0 ر.س</strong></div>
+        <div class="summary-row discount-row hidden" id="cart-discount-row"><span>الخصم</span><strong id="cart-discount">-0 ر.س</strong></div>
+        <div class="summary-row"><span>الشحن</span><strong id="cart-shipping">مجاني</strong></div>
+        <div class="summary-row"><span>ضريبة القيمة المضافة (<span id="cart-vat-rate">15</span>%)</span><strong id="cart-vat">0 ر.س</strong></div>
+        <div class="summary-row total-row"><span>الإجمالي النهائي</span><strong id="cart-total">0 ر.س</strong></div>
+      </div>
+
+      <div class="cart-footer-actions">
+        <button type="button" class="btn btn-primary btn-full" id="proceed-checkout-btn">إتمام الطلب الآن</button>
+        <button type="button" class="btn btn-whatsapp btn-full" id="whatsapp-cart-btn">إرسال السلة عبر واتساب</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- نافذة إتمام الطلب Checkout -->
+  <div class="modal-backdrop" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
+    <div class="modal-dialog modal-xl">
+      <button type="button" class="modal-close-btn" id="close-checkout-modal" aria-label="إغلاق">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div id="checkout-form-view">
+        <div class="checkout-header">
+          <h2 id="checkout-modal-title">إتمام الطلب</h2>
+          <p>أكمل بيانات التوصيل واختر وسيلة الدفع المناسبة لك</p>
+        </div>
+
+        <div class="checkout-grid">
+          <form id="checkout-form" class="checkout-form">
+            <h4>1. بيانات المستلم والعنوان</h4>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="co-name">الاسم الكامل *</label>
+                <input type="text" id="co-name" required placeholder="الاسم الثلاثي">
+              </div>
+              <div class="form-group">
+                <label for="co-phone">رقم الجوال *</label>
+                <input type="tel" id="co-phone" required placeholder="05XXXXXXXX">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="co-email">البريد الإلكتروني</label>
+                <input type="email" id="co-email" placeholder="لإرسال نسخة الفاتورة">
+              </div>
+              <div class="form-group">
+                <label for="co-city">المدينة *</label>
+                <select id="co-city" required>
+                  <option value="الرياض">الرياض</option>
+                  <option value="جدة">جدة</option>
+                  <option value="الدمام">الدمام</option>
+                  <option value="الخبر">الخبر</option>
+                  <option value="مكة المكرمة">مكة المكرمة</option>
+                  <option value="المدينة المنورة">المدينة المنورة</option>
+                  <option value="أبها">أبها</option>
+                  <option value="تبوك">تبوك</option>
+                  <option value="القصيم">القصيم</option>
+                  <option value="أخرى">مدينة أخرى</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="co-address">العنوان التفصيلي *</label>
+              <input type="text" id="co-address" required placeholder="الحي، اسم الشارع، رقم المبنى أو الفيلا">
+            </div>
+
+            <div class="form-group">
+              <label for="co-notes">ملاحظات التوصيل (اختياري)</label>
+              <input type="text" id="co-notes" placeholder="الوقت المفضل للتوصيل أو أي تعليمات إضافية">
+            </div>
+
+            <h4>2. طريقة الدفع</h4>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="cod" checked>
+                <div>
+                  <strong>الدفع عند الاستلام</strong>
+                  <span>ادفع نقداً أو عبر جهاز مدى عند وصول المندوب</span>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="card">
+                <div>
+                  <strong>بطاقة مدى / فيزا / ماستركارد</strong>
+                  <span>دفع إلكتروني فوري آمن (بيئة تجريبية جاهزة للربط مع بوابات الدفع)</span>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="bank">
+                <div>
+                  <strong>تحويل بنكي</strong>
+                  <span>التحويل إلى الحساب البنكي الرسمي للمتجر</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- تفاصيل البطاقة التجريبية عند اختيار الدفع بالبطاقة -->
+            <div class="payment-extra-box hidden" id="card-payment-box">
+              <div class="form-group">
+                <label for="co-card-number">رقم البطاقة (تجريبي)</label>
+                <input type="text" id="co-card-number" maxlength="19" placeholder="4242 4242 4242 4242">
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="co-card-exp">تاريخ الانتهاء</label>
+                  <input type="text" id="co-card-exp" maxlength="5" placeholder="12/28">
+                </div>
+                <div class="form-group">
+                  <label for="co-card-cvv">رمز الأمان CVV</label>
+                  <input type="text" id="co-card-cvv" maxlength="4" placeholder="123">
+                </div>
+              </div>
+            </div>
+
+            <!-- تفاصيل التحويل البنكي -->
+            <div class="payment-extra-box hidden" id="bank-payment-box">
+              <p><strong>البنك:</strong> <span id="co-bank-name">مصرف الراجحي</span></p>
+              <p><strong>اسم الحساب:</strong> <span id="co-bank-account">مؤسسة تِك ماركت للحاسبات</span></p>
+              <p><strong>رقم الآيبان (IBAN):</strong> <code dir="ltr" id="co-bank-iban">SA44 8000 0215 6080 1054 3210</code></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-full" id="confirm-order-btn">تأكيد وإرسال الطلب</button>
+          </form>
+
+          <aside class="checkout-summary">
+            <h4>ملخص الطلب</h4>
+            <div class="checkout-items" id="checkout-items"></div>
+            <div class="cart-summary-rows" id="checkout-totals"></div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- شاشة تأكيد الطلب -->
+      <div id="checkout-success-view" class="checkout-success hidden"></div>
+    </div>
+  </div>
+
+  <!-- حاوية الإشعارات Toast -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="/js/store.js"></script>
+</body>
+</html>
