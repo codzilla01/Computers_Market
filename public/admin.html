@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة إدارة المتجر | تِك ماركت للكمبيوتر</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <!-- شاشة تسجيل الدخول -->
+  <section class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/><polyline points="9 9 7 11 9 13"/><polyline points="15 9 17 11 15 13"/></svg>
+        </div>
+        <h1>لوحة إدارة المتجر</h1>
+        <p>سجّل الدخول لإدارة المنتجات والطلبات والمخزون والإعدادات</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">البريد الإلكتروني</label>
+          <input type="email" id="login-email" required placeholder="admin@computers-market.sa" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="login-password">كلمة المرور</label>
+          <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="login-error hidden" id="login-error"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn">تسجيل الدخول</button>
+      </form>
+
+      <div class="demo-creds">
+        <div><strong>بيانات الدخول الافتراضية:</strong></div>
+        <div dir="ltr" class="ltr-mono">admin@computers-market.sa &nbsp;|&nbsp; Admin@2026</div>
+        <button type="button" class="link-btn" id="fill-demo-creds">تعبئة تلقائية للتجربة</button>
+        <p class="demo-note">يُرجى تغيير كلمة المرور من قسم الإعدادات قبل الإطلاق الفعلي.</p>
+      </div>
+
+      <a href="/" class="back-store-link">← العودة إلى واجهة المتجر</a>
+    </div>
+  </section>
+
+  <!-- واجهة لوحة التحكم -->
+  <div class="admin-shell hidden" id="admin-shell">
+    <!-- القائمة الجانبية -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon-sm">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          </span>
+          <div>
+            <strong>تِك ماركت</strong>
+            <span>لوحة الإدارة</span>
+          </div>
+        </div>
+        <button type="button" class="icon-btn sidebar-close-mobile" id="close-sidebar-btn" aria-label="إغلاق القائمة">✕</button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <button type="button" class="nav-item active" data-section="overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          <span>نظرة عامة</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="products">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span>إدارة المنتجات</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>إدارة الطلبات</span>
+          <span class="nav-pill hidden" id="nav-pending-orders">0</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="coupons">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>أكواد الخصم</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="messages">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>رسائل العملاء</span>
+          <span class="nav-pill hidden" id="nav-unread-messages">0</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>إعدادات المتجر</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/" class="sidebar-link" target="_blank" rel="noopener noreferrer">معاينة المتجر ↗</a>
+        <button type="button" class="btn btn-danger-soft btn-full" id="logout-btn">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-right">
+          <button type="button" class="icon-btn mobile-sidebar-btn" id="open-sidebar-btn" aria-label="فتح القائمة">☰</button>
+          <h2 id="section-heading">نظرة عامة</h2>
+        </div>
+        <div class="topbar-left">
+          <span class="admin-user-pill" id="admin-user-name">مدير المتجر</span>
+        </div>
+      </header>
+
+      <main class="admin-content">
+        <!-- 1. نظرة عامة -->
+        <section class="admin-section" id="sec-overview">
+          <div class="kpi-grid" id="kpi-grid"></div>
+
+          <div class="dashboard-panels">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>أحدث الطلبات</h3>
+                <button type="button" class="link-btn" data-jump-section="orders">عرض الكل</button>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>رقم الطلب</th>
+                      <th>العميل</th>
+                      <th>الإجمالي</th>
+                      <th>الحالة</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-orders-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>تنبيهات المخزون المنخفض</h3>
+                <button type="button" class="link-btn" data-jump-section="products">إدارة المنتجات</button>
+              </div>
+              <div id="low-stock-list" class="low-stock-list"></div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:1.25rem;">
+            <div class="panel-header">
+              <h3>توزيع المخزون حسب العلامة التجارية</h3>
+            </div>
+            <div id="brand-breakdown" class="brand-bars"></div>
+          </div>
+        </section>
+
+        <!-- 2. إدارة المنتجات -->
+        <section class="admin-section hidden" id="sec-products">
+          <div class="section-toolbar">
+            <div class="toolbar-inputs">
+              <input type="search" id="admin-product-search" placeholder="ابحث بالاسم أو الرمز (SKU)...">
+              <select id="admin-product-brand">
+                <option value="all">كل العلامات</option>
+                <option value="apple">Apple</option>
+                <option value="dell">Dell</option>
+                <option value="hp">HP</option>
+                <option value="lenovo">Lenovo</option>
+                <option value="asus">ASUS</option>
+                <option value="msi">MSI</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="open-add-product-btn">+ إضافة منتج جديد</button>
+          </div>
+
+          <div class="panel">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>المنتج</th>
+                    <th>العلامة / الفئة</th>
+                    <th>السعر</th>
+                    <th>المخزون</th>
+                    <th>الحالة</th>
+                    <th>إجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. إدارة الطلبات -->
+        <section class="admin-section hidden" id="sec-orders">
+          <div class="section-toolbar">
+            <div class="toolbar-inputs">
+              <input type="search" id="admin-order-search" placeholder="ابحث برقم الطلب أو اسم العميل أو الجوال...">
+              <select id="admin-order-status">
+                <option value="all">كل الحالات</option>
+                <option value="pending">قيد المراجعة</option>
+                <option value="processing">جاري التجهيز</option>
+                <option value="shipped">تم الشحن</option>
+                <option value="delivered">تم التوصيل</option>
+                <option value="cancelled">ملغي</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-secondary" id="refresh-orders-btn">تحديث القائمة</button>
+          </div>
+
+          <div class="panel">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>رقم الطلب</th>
+                    <th>العميل</th>
+                    <th>المدينة</th>
+                    <th>الدفع</th>
+                    <th>الإجمالي</th>
+                    <th>الحالة</th>
+                    <th>التفاصيل</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. أكواد الخصم -->
+        <section class="admin-section hidden" id="sec-coupons">
+          <div class="panel" style="margin-bottom:1.25rem;">
+            <div class="panel-header"><h3>إنشاء كود خصم جديد</h3></div>
+            <form id="coupon-form" class="coupon-create-grid">
+              <div class="form-group">
+                <label for="cp-code">الكود *</label>
+                <input type="text" id="cp-code" required placeholder="مثال: TECH15">
+              </div>
+              <div class="form-group">
+                <label for="cp-type">النوع</label>
+                <select id="cp-type">
+                  <option value="percent">نسبة مئوية (%)</option>
+                  <option value="fixed">مبلغ ثابت (ر.س)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cp-value">القيمة *</label>
+                <input type="number" id="cp-value" required min="1" step="0.5" placeholder="10">
+              </div>
+              <div class="form-group">
+                <label for="cp-min">الحد الأدنى للطلب</label>
+                <input type="number" id="cp-min" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label for="cp-max">حد الاستخدام (0=غير محدود)</label>
+                <input type="number" id="cp-max" min="0" value="100">
+              </div>
+              <div class="form-group" style="display:flex;align-items:flex-end;">
+                <button type="submit" class="btn btn-primary btn-full">إنشاء الكود</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>الكود</th>
+                    <th>قيمة الخصم</th>
+                    <th>الحد الأدنى</th>
+                    <th>الاستخدام</th>
+                    <th>الحالة</th>
+                    <th>إجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="coupons-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. رسائل العملاء -->
+        <section class="admin-section hidden" id="sec-messages">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>صندوق رسائل واستفسارات العملاء</h3>
+            </div>
+            <div id="messages-list" class="messages-list"></div>
+          </div>
+        </section>
+
+        <!-- 6. إعدادات المتجر والأمان -->
+        <section class="admin-section hidden" id="sec-settings">
+          <div class="settings-grid">
+            <form id="settings-form" class="panel">
+              <div class="panel-header"><h3>بيانات المتجر والشحن والضريبة</h3></div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="set-store_name">اسم المتجر</label>
+                  <input type="text" id="set-store_name" name="store_name" required>
+                </div>
+                <div class="form-group">
+                  <label for="set-email">البريد الإلكتروني</label>
+                  <input type="email" id="set-email" name="email" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="set-store_tagline">الوصف التعريفي بالبانر</label>
+                <input type="text" id="set-store_tagline" name="store_tagline">
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="set-phone">رقم الهاتف</label>
+                  <input type="text" id="set-phone" name="phone">
+                </div>
+                <div class="form-group">
+                  <label for="set-whatsapp">رقم واتساب (بالصيغة الدولية بدون +)</label>
+                  <input type="text" id="set-whatsapp" name="whatsapp" placeholder="966501234567">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="set-address">العنوان</label>
+                <input type="text" id="set-address" name="address">
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="set-hours_weekdays">ساعات العمل (الأيام العادية)</label>
+                  <input type="text" id="set-hours_weekdays" name="hours_weekdays">
+                </div>
+                <div class="form-group">
+                  <label for="set-hours_weekend">ساعات العمل (نهاية الأسبوع)</label>
+                  <input type="text" id="set-hours_weekend" name="hours_weekend">
+                </div>
+              </div>
+
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label for="set-vat_rate">نسبة الضريبة (%)</label>
+                  <input type="number" id="set-vat_rate" name="vat_rate" min="0" max="50" step="0.5">
+                </div>
+                <div class="form-group">
+                  <label for="set-shipping_fee">رسوم الشحن (ر.س)</label>
+                  <input type="number" id="set-shipping_fee" name="shipping_fee" min="0">
+                </div>
+                <div class="form-group">
+                  <label for="set-free_shipping_threshold">الشحن المجاني فوق (ر.س)</label>
+                  <input type="number" id="set-free_shipping_threshold" name="free_shipping_threshold" min="0">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="set-bank_name">اسم البنك (للتحويل البنكي)</label>
+                  <input type="text" id="set-bank_name" name="bank_name">
+                </div>
+                <div class="form-group">
+                  <label for="set-bank_iban">رقم الآيبان (IBAN)</label>
+                  <input type="text" id="set-bank_iban" name="bank_iban" dir="ltr">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">حفظ إعدادات المتجر</button>
+            </form>
+
+            <form id="password-form" class="panel">
+              <div class="panel-header"><h3>تغيير كلمة مرور المدير</h3></div>
+              <div class="form-group">
+                <label for="pw-current">كلمة المرور الحالية</label>
+                <input type="password" id="pw-current" required>
+              </div>
+              <div class="form-group">
+                <label for="pw-new">كلمة المرور الجديدة (8 أحرف على الأقل)</label>
+                <input type="password" id="pw-new" required minlength="8">
+              </div>
+              <div class="form-group">
+                <label for="pw-confirm">تأكيد كلمة المرور الجديدة</label>
+                <input type="password" id="pw-confirm" required minlength="8">
+              </div>
+              <button type="submit" class="btn btn-secondary btn-full">تحديث كلمة المرور</button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة/تعديل منتج -->
+  <div class="modal-backdrop" id="product-editor-modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 id="product-editor-title">إضافة منتج جديد</h3>
+        <button type="button" class="icon-btn" id="close-product-editor" aria-label="إغلاق">✕</button>
+      </div>
+      <form id="product-editor-form" class="modal-body-pad">
+        <input type="hidden" id="pe-id">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="pe-title">اسم المنتج *</label>
+            <input type="text" id="pe-title" required placeholder="مثال: MacBook Pro 14 M4">
+          </div>
+          <div class="form-group">
+            <label for="pe-sku">رمز المنتج (SKU)</label>
+            <input type="text" id="pe-sku" placeholder="يُنشأ تلقائياً إذا تُرك فارغاً">
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label for="pe-brand">العلامة التجارية *</label>
+            <select id="pe-brand" required>
+              <option value="apple">Apple</option>
+              <option value="dell">Dell</option>
+              <option value="hp">HP</option>
+              <option value="lenovo">Lenovo</option>
+              <option value="asus">ASUS</option>
+              <option value="msi">MSI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pe-category">الفئة *</label>
+            <select id="pe-category" required>
+              <option value="laptops">لابتوب</option>
+              <option value="business">أجهزة أعمال</option>
+              <option value="gaming">ألعاب</option>
+              <option value="desktops">أجهزة مكتبية</option>
+              <option value="accessories">ملحقات وشاشات</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pe-badge">شارة (اختياري)</label>
+            <input type="text" id="pe-badge" placeholder="جديد / الأكثر مبيعاً / عرض خاص">
+          </div>
+        </div>
+
+        <div class="form-grid-4">
+          <div class="form-group">
+            <label for="pe-price">السعر (ر.س) *</label>
+            <input type="number" id="pe-price" required min="1" step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="pe-old-price">السعر قبل الخصم</label>
+            <input type="number" id="pe-old-price" min="0" step="0.01" placeholder="اختياري">
+          </div>
+          <div class="form-group">
+            <label for="pe-stock">المخزون *</label>
+            <input type="number" id="pe-stock" required min="0" value="10">
+          </div>
+          <div class="form-group">
+            <label for="pe-rating">التقييم (1-5)</label>
+            <input type="number" id="pe-rating" min="1" max="5" step="0.1" value="4.8">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>صورة المنتج *</label>
+          <div class="image-upload-row">
+            <img id="pe-image-preview" src="/assets/images/macbook-pro-16.jpg" alt="معاينة الصورة" class="img-preview-thumb">
+            <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+              <input type="text" id="pe-image" required placeholder="/assets/images/..." value="/assets/images/macbook-pro-16.jpg">
+              <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                <label class="btn btn-secondary btn-sm" style="margin:0;cursor:pointer;">
+                  رفع صورة من جهازك
+                  <input type="file" id="pe-image-file" accept="image/jpeg,image/png,image/webp" hidden>
+                </label>
+                <span class="hint-text" id="pe-upload-status">JPG, PNG, WebP (حد أقصى 3MB)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="pe-description">وصف المنتج *</label>
+          <textarea id="pe-description" rows="3" required placeholder="وصف واضح ومختصر لمميزات الجهاز..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <label style="margin:0;">المواصفات الفنية</label>
+            <button type="button" class="btn btn-secondary btn-sm" id="add-spec-row-btn">+ إضافة مواصفة</button>
+          </div>
+          <div id="pe-specs-container" class="specs-editor-list"></div>
+        </div>
+
+        <div class="checkbox-row">
+          <label><input type="checkbox" id="pe-featured"> منتج مميز في الصدارة</label>
+          <label><input type="checkbox" id="pe-active" checked> ظاهر في المتجر</label>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="submit" class="btn btn-primary" id="pe-save-btn">حفظ المنتج</button>
+          <button type="button" class="btn btn-secondary" id="pe-cancel-btn">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تفاصيل الطلب -->
+  <div class="modal-backdrop" id="order-detail-modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 id="order-detail-title">تفاصيل الطلب</h3>
+        <button type="button" class="icon-btn" id="close-order-detail" aria-label="إغلاق">✕</button>
+      </div>
+      <div id="order-detail-body" class="modal-body-pad"></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
