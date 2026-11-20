@@ -31,6 +31,7 @@ function initSchema(db) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS admins (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL UNIQUE,
       email TEXT NOT NULL UNIQUE,
       name TEXT NOT NULL,
       password_hash TEXT NOT NULL,
@@ -120,16 +121,50 @@ function initSchema(db) {
       value TEXT NOT NULL
     );
   `);
+
+  // Backward-compatible migrations for databases created before username login
+  migrateAdminsUsername(db);
+}
+
+function migrateAdminsUsername(db) {
+  const columns = db.prepare('PRAGMA table_info(admins)').all();
+  if (columns.some((c) => c.name === 'username')) return;
+
+  db.exec('ALTER TABLE admins ADD COLUMN username TEXT');
+
+  // Backfill unique usernames from the email prefix so existing admins keep working
+  const admins = db.prepare('SELECT id, email FROM admins ORDER BY id ASC').all();
+  const used = new Set();
+  const updateStmt = db.prepare('UPDATE admins SET username = ? WHERE id = ?');
+  for (const admin of admins) {
+    let base = String(admin.email || 'admin')
+      .split('@')[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9_.-]/g, '');
+    if (base.length < 3) base = 'admin';
+    let candidate = base;
+    let counter = 1;
+    while (used.has(candidate)) {
+      counter += 1;
+      candidate = `${base}${counter}`;
+    }
+    used.add(candidate);
+    updateStmt.run(candidate, admin.id);
+  }
+
+  db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_admins_username ON admins(username)');
 }
 
 function seedDatabase(db) {
   // 1. Seed default Admin
   const adminCount = db.prepare('SELECT COUNT(*) AS count FROM admins').get().count;
   if (adminCount === 0) {
+    const defaultUsername = process.env.ADMIN_USERNAME || 'admin';
     const defaultEmail = process.env.ADMIN_EMAIL || 'admin@computers-market.sa';
     const defaultPassword = process.env.ADMIN_PASSWORD || 'Admin@2026';
     const hash = bcrypt.hashSync(defaultPassword, 10);
-    db.prepare('INSERT INTO admins (email, name, password_hash) VALUES (?, ?, ?)').run(
+    db.prepare('INSERT INTO admins (username, email, name, password_hash) VALUES (?, ?, ?, ?)').run(
+      defaultUsername,
       defaultEmail,
       'مدير المتجر',
       hash

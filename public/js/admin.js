@@ -43,13 +43,19 @@
   const els = {
     loginScreen: document.getElementById('login-screen'),
     loginForm: document.getElementById('login-form'),
-    loginEmail: document.getElementById('login-email'),
+    loginUsername: document.getElementById('login-username'),
     loginPassword: document.getElementById('login-password'),
     loginError: document.getElementById('login-error'),
+    capsLockHint: document.getElementById('caps-lock-hint'),
     adminShell: document.getElementById('admin-shell'),
     adminSidebar: document.getElementById('admin-sidebar'),
     sectionHeading: document.getElementById('section-heading'),
     adminUserName: document.getElementById('admin-user-name'),
+    adminAvatar: document.getElementById('admin-avatar'),
+    topbarDate: document.getElementById('topbar-date'),
+    sidebarUserAvatar: document.getElementById('sidebar-user-avatar'),
+    sidebarUserName: document.getElementById('sidebar-user-name'),
+    sidebarUsername: document.getElementById('sidebar-username'),
     navPendingOrders: document.getElementById('nav-pending-orders'),
     navUnreadMessages: document.getElementById('nav-unread-messages'),
     kpiGrid: document.getElementById('kpi-grid'),
@@ -57,15 +63,20 @@
     lowStockList: document.getElementById('low-stock-list'),
     brandBreakdown: document.getElementById('brand-breakdown'),
     productsTbody: document.getElementById('products-tbody'),
+    productsCount: document.getElementById('products-count'),
     adminProductSearch: document.getElementById('admin-product-search'),
     adminProductBrand: document.getElementById('admin-product-brand'),
     ordersTbody: document.getElementById('orders-tbody'),
+    ordersCount: document.getElementById('orders-count'),
     adminOrderSearch: document.getElementById('admin-order-search'),
     adminOrderStatus: document.getElementById('admin-order-status'),
     couponsTbody: document.getElementById('coupons-tbody'),
+    couponsCount: document.getElementById('coupons-count'),
     couponForm: document.getElementById('coupon-form'),
     messagesList: document.getElementById('messages-list'),
+    messagesCount: document.getElementById('messages-count'),
     settingsForm: document.getElementById('settings-form'),
+    profileForm: document.getElementById('profile-form'),
     passwordForm: document.getElementById('password-form'),
     productEditorModal: document.getElementById('product-editor-modal'),
     productEditorTitle: document.getElementById('product-editor-title'),
@@ -74,6 +85,11 @@
     orderDetailModal: document.getElementById('order-detail-modal'),
     orderDetailTitle: document.getElementById('order-detail-title'),
     orderDetailBody: document.getElementById('order-detail-body'),
+    confirmModal: document.getElementById('confirm-modal'),
+    confirmTitle: document.getElementById('confirm-title'),
+    confirmMessage: document.getElementById('confirm-message'),
+    confirmOkBtn: document.getElementById('confirm-ok-btn'),
+    confirmCancelBtn: document.getElementById('confirm-cancel-btn'),
     toastContainer: document.getElementById('toast-container')
   };
 
@@ -91,12 +107,66 @@
     return `${n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })} ر.س`;
   }
 
+  const TOAST_ICONS = {
+    success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+
+  const EMPTY_SVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';
+
+  const EYE_OPEN_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_CLOSED_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
   function showToast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = `toast ${type}`;
-    t.textContent = msg;
+    t.innerHTML = `<span class="toast-icon">${TOAST_ICONS[type] || TOAST_ICONS.info}</span><span>${escapeHtml(msg)}</span>`;
+    t.addEventListener('click', () => t.remove());
     els.toastContainer.appendChild(t);
-    setTimeout(() => t.remove(), 3200);
+    setTimeout(() => {
+      t.classList.add('hide');
+      setTimeout(() => t.remove(), 300);
+    }, 3200);
+  }
+
+  function emptyRow(colspan, text) {
+    return `<tr><td colspan="${colspan}"><div class="empty-state">${EMPTY_SVG}<p>${escapeHtml(text)}</p></div></td></tr>`;
+  }
+
+  // Confirm dialog (Promise-based replacement for window.confirm)
+  let pendingConfirmResolve = null;
+
+  function confirmDialog({ title = 'تأكيد الإجراء', message = 'هل أنت متأكد من تنفيذ هذا الإجراء؟', okText = 'تأكيد', danger = true } = {}) {
+    return new Promise((resolve) => {
+      els.confirmTitle.textContent = title;
+      els.confirmMessage.textContent = message;
+      els.confirmOkBtn.textContent = okText;
+      els.confirmOkBtn.className = danger ? 'btn btn-danger' : 'btn btn-primary';
+      els.confirmModal.classList.add('open');
+
+      const cleanup = () => {
+        pendingConfirmResolve = null;
+        els.confirmModal.classList.remove('open');
+        els.confirmOkBtn.removeEventListener('click', onOk);
+        els.confirmCancelBtn.removeEventListener('click', onCancel);
+        els.confirmModal.removeEventListener('click', onBackdrop);
+      };
+      const settle = (val) => {
+        cleanup();
+        resolve(val);
+      };
+      const onOk = () => settle(true);
+      const onCancel = () => settle(false);
+      const onBackdrop = (e) => {
+        if (e.target === els.confirmModal) settle(false);
+      };
+
+      pendingConfirmResolve = settle;
+      els.confirmOkBtn.addEventListener('click', onOk);
+      els.confirmCancelBtn.addEventListener('click', onCancel);
+      els.confirmModal.addEventListener('click', onBackdrop);
+    });
   }
 
   async function api(url, options = {}) {
@@ -124,14 +194,37 @@
     state.admin = null;
     els.adminShell.classList.add('hidden');
     els.loginScreen.classList.remove('hidden');
+    setTimeout(() => els.loginUsername.focus(), 50);
+  }
+
+  function updateAdminIdentity(admin) {
+    const displayName = (admin.name || admin.username || 'مدير المتجر').trim();
+    const initial = displayName.charAt(0) || 'م';
+    els.adminUserName.textContent = displayName;
+    els.adminAvatar.textContent = initial;
+    els.sidebarUserName.textContent = displayName;
+    els.sidebarUserAvatar.textContent = initial;
+    els.sidebarUsername.textContent = admin.username ? `@${admin.username}` : '';
   }
 
   function showDashboard(admin) {
     state.admin = admin;
-    els.adminUserName.textContent = admin.name || admin.email;
+    updateAdminIdentity(admin);
     els.loginScreen.classList.add('hidden');
     els.adminShell.classList.remove('hidden');
     switchSection('overview');
+  }
+
+  function setLoginLoading(loading) {
+    const btn = document.getElementById('login-submit-btn');
+    if (loading) {
+      btn.disabled = true;
+      if (!btn.dataset.original) btn.dataset.original = btn.innerHTML;
+      btn.innerHTML = '<span class="btn-spinner"></span> جاري تسجيل الدخول...';
+    } else {
+      btn.disabled = false;
+      if (btn.dataset.original) btn.innerHTML = btn.dataset.original;
+    }
   }
 
   async function checkSession() {
@@ -146,20 +239,29 @@
   async function handleLogin(e) {
     e.preventDefault();
     els.loginError.classList.add('hidden');
+    setLoginLoading(true);
     try {
       const { admin } = await api('/api/admin/login', {
         method: 'POST',
         body: JSON.stringify({
-          email: els.loginEmail.value.trim(),
+          username: els.loginUsername.value.trim(),
           password: els.loginPassword.value
         })
       });
       els.loginForm.reset();
       showDashboard(admin);
-      showToast('مرحباً بك في لوحة إدارة المتجر', 'success');
+      showToast(`مرحباً بعودتك، ${admin.name || admin.username}`, 'success');
     } catch (err) {
       els.loginError.textContent = err.message;
       els.loginError.classList.remove('hidden');
+      const card = document.querySelector('.login-card');
+      if (card) {
+        card.classList.remove('shake');
+        void card.offsetWidth;
+        card.classList.add('shake');
+      }
+    } finally {
+      setLoginLoading(false);
     }
   }
 
@@ -195,7 +297,25 @@
   // ===========================
   // 1. Overview
   // ===========================
+  const KPI_ICONS = {
+    revenue: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
+    orders: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+    inventory: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+    messages: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
+  };
+
   async function loadOverview() {
+    els.kpiGrid.innerHTML = [1, 2, 3, 4]
+      .map(
+        () => `
+        <div class="kpi-card">
+          <div class="skeleton-block" style="height:14px;width:45%;margin-bottom:0.6rem;"></div>
+          <div class="skeleton-block" style="height:30px;width:70%;margin-bottom:0.5rem;"></div>
+          <div class="skeleton-block" style="height:12px;width:90%;"></div>
+        </div>
+      `
+      )
+      .join('');
     try {
       const data = await api('/api/admin/stats');
       const k = data.kpis;
@@ -206,26 +326,26 @@
       els.navUnreadMessages.classList.toggle('hidden', k.unread_messages === 0);
 
       els.kpiGrid.innerHTML = `
-        <div class="kpi-card">
-          <div class="kpi-label">إجمالي المبيعات</div>
+        <button type="button" class="kpi-card kpi-accent-green" data-jump-section="orders" title="الانتقال إلى إدارة الطلبات">
+          <div class="kpi-top"><div class="kpi-label">إجمالي المبيعات</div><span class="kpi-icon">${KPI_ICONS.revenue}</span></div>
           <div class="kpi-value">${formatMoney(k.total_revenue)}</div>
           <div class="kpi-sub">${k.delivered_orders} طلب مكتمل • ${k.shipped_orders} تم شحنه</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">الطلبات</div>
+        </button>
+        <button type="button" class="kpi-card kpi-accent-blue" data-jump-section="orders" title="الانتقال إلى إدارة الطلبات">
+          <div class="kpi-top"><div class="kpi-label">الطلبات</div><span class="kpi-icon">${KPI_ICONS.orders}</span></div>
           <div class="kpi-value">${k.total_orders}</div>
           <div class="kpi-sub">${k.pending_orders} قيد المراجعة • ${k.processing_orders} قيد التجهيز</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">المنتجات والمخزون</div>
+        </button>
+        <button type="button" class="kpi-card kpi-accent-purple" data-jump-section="products" title="الانتقال إلى إدارة المنتجات">
+          <div class="kpi-top"><div class="kpi-label">المنتجات والمخزون</div><span class="kpi-icon">${KPI_ICONS.inventory}</span></div>
           <div class="kpi-value">${k.total_products} منتج</div>
           <div class="kpi-sub">${k.total_inventory_units} قطعة بالمخزون • ${k.low_stock_count} مخزون منخفض</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">رسائل العملاء</div>
+        </button>
+        <button type="button" class="kpi-card kpi-accent-amber" data-jump-section="messages" title="الانتقال إلى رسائل العملاء">
+          <div class="kpi-top"><div class="kpi-label">رسائل العملاء</div><span class="kpi-icon">${KPI_ICONS.messages}</span></div>
           <div class="kpi-value">${k.unread_messages}</div>
           <div class="kpi-sub">رسائل غير مقروءة بحاجة للرد</div>
-        </div>
+        </button>
       `;
 
       els.recentOrdersTbody.innerHTML = data.recent_orders.length
@@ -241,7 +361,7 @@
             `
             )
             .join('')
-        : '<tr><td colspan="4" style="text-align:center;color:var(--ink-muted);">لا توجد طلبات حتى الآن</td></tr>';
+        : emptyRow(4, 'لا توجد طلبات حتى الآن');
 
       els.lowStockList.innerHTML = data.low_stock_products.length
         ? data.low_stock_products
@@ -303,6 +423,7 @@
       return true;
     });
 
+    els.productsCount.textContent = `عرض ${filtered.length} من أصل ${state.products.length} منتج`;
     els.productsTbody.innerHTML = filtered.length
       ? filtered
           .map(
@@ -346,7 +467,7 @@
           `
           )
           .join('')
-      : '<tr><td colspan="6" style="text-align:center;color:var(--ink-muted);">لا توجد منتجات مطابقة</td></tr>';
+      : emptyRow(6, 'لا توجد منتجات مطابقة');
   }
 
   function addSpecRow(key = '', val = '') {
@@ -490,6 +611,7 @@
   }
 
   function renderOrdersTable() {
+    els.ordersCount.textContent = `عدد الطلبات المعروضة: ${state.orders.length}`;
     els.ordersTbody.innerHTML = state.orders.length
       ? state.orders
           .map(
@@ -517,7 +639,7 @@
           `
           )
           .join('')
-      : '<tr><td colspan="7" style="text-align:center;color:var(--ink-muted);">لا توجد طلبات مطابقة</td></tr>';
+      : emptyRow(7, 'لا توجد طلبات مطابقة');
   }
 
   async function updateOrderStatus(orderId, nextStatus) {
@@ -595,6 +717,7 @@
     try {
       const { coupons } = await api('/api/coupons');
       state.coupons = coupons || [];
+      els.couponsCount.textContent = `عدد الأكواد: ${state.coupons.length}`;
       els.couponsTbody.innerHTML = state.coupons.length
         ? state.coupons
             .map(
@@ -615,7 +738,7 @@
             `
             )
             .join('')
-        : '<tr><td colspan="6" style="text-align:center;color:var(--ink-muted);">لا توجد أكواد خصم</td></tr>';
+        : emptyRow(6, 'لا توجد أكواد خصم');
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -628,6 +751,8 @@
     try {
       const { messages } = await api('/api/messages');
       state.messages = messages || [];
+      const unreadCount = state.messages.filter((m) => !m.is_read).length;
+      els.messagesCount.textContent = `${state.messages.length} رسالة • ${unreadCount} جديدة`;
       els.messagesList.innerHTML = state.messages.length
         ? state.messages
             .map(
@@ -652,7 +777,7 @@
             `
             )
             .join('')
-        : '<p style="text-align:center;color:var(--ink-muted);padding:2rem;">لا توجد رسائل حالياً.</p>';
+        : `<div class="empty-state">${EMPTY_SVG}<p>لا توجد رسائل حالياً.</p></div>`;
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -663,14 +788,49 @@
   // ===========================
   async function loadAdminSettings() {
     try {
-      const { settings } = await api('/api/admin/public-settings');
+      const [{ settings }, me] = await Promise.all([
+        api('/api/admin/public-settings'),
+        api('/api/admin/me')
+      ]);
       state.settings = settings || {};
       for (const [key, value] of Object.entries(state.settings)) {
         const input = document.getElementById(`set-${key}`);
         if (input) input.value = value;
       }
+      if (me && me.admin) {
+        document.getElementById('pf-name').value = me.admin.name || '';
+        document.getElementById('pf-username').value = me.admin.username || '';
+      }
     } catch (err) {
       showToast(err.message, 'error');
+    }
+  }
+
+  function updatePasswordStrength(pw) {
+    const fill = document.getElementById('pw-strength');
+    const label = document.getElementById('pw-strength-label');
+    if (!fill || !label) return;
+    if (!pw) {
+      fill.style.width = '0';
+      label.textContent = 'أدخل كلمة مرور قوية تحتوي على أحرف وأرقام ورموز.';
+      return;
+    }
+    let score = 0;
+    if (pw.length >= 8) score += 1;
+    if (pw.length >= 12) score += 1;
+    if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score += 1;
+    if (/\d/.test(pw)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pw)) score += 1;
+    fill.style.width = `${Math.min(100, score * 20)}%`;
+    if (score <= 2) {
+      fill.style.background = 'var(--danger)';
+      label.textContent = 'قوة كلمة المرور: ضعيفة';
+    } else if (score <= 3) {
+      fill.style.background = 'var(--warning)';
+      label.textContent = 'قوة كلمة المرور: متوسطة';
+    } else {
+      fill.style.background = 'var(--success)';
+      label.textContent = 'قوة كلمة المرور: قوية';
     }
   }
 
@@ -680,8 +840,9 @@
   function bindEvents() {
     els.loginForm.addEventListener('submit', handleLogin);
     document.getElementById('fill-demo-creds').addEventListener('click', () => {
-      els.loginEmail.value = 'admin@computers-market.sa';
+      els.loginUsername.value = 'admin';
       els.loginPassword.value = 'Admin@2026';
+      els.loginPassword.focus();
     });
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
 
@@ -760,7 +921,12 @@
 
       if (delBtn) {
         const pid = parseInt(delBtn.dataset.deleteProduct, 10);
-        if (!window.confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')) return;
+        const confirmed = await confirmDialog({
+          title: 'حذف المنتج',
+          message: 'هل أنت متأكد من حذف هذا المنتج نهائياً؟ لا يمكن التراجع عن هذا الإجراء.',
+          okText: 'حذف نهائي'
+        });
+        if (!confirmed) return;
         try {
           const res = await api(`/api/products/${pid}`, { method: 'DELETE' });
           showToast(res.message, 'success');
@@ -816,7 +982,12 @@
         }
       }
       if (del) {
-        if (!window.confirm('حذف كود الخصم؟')) return;
+        const confirmed = await confirmDialog({
+          title: 'حذف كود الخصم',
+          message: 'هل أنت متأكد من حذف كود الخصم هذا؟',
+          okText: 'حذف الكود'
+        });
+        if (!confirmed) return;
         try {
           const res = await api(`/api/coupons/${del.dataset.deleteCoupon}`, { method: 'DELETE' });
           showToast(res.message, 'success');
@@ -843,7 +1014,12 @@
         }
       }
       if (delBtn) {
-        if (!window.confirm('حذف هذه الرسالة؟')) return;
+        const confirmed = await confirmDialog({
+          title: 'حذف الرسالة',
+          message: 'هل أنت متأكد من حذف هذه الرسالة نهائياً؟',
+          okText: 'حذف الرسالة'
+        });
+        if (!confirmed) return;
         try {
           await api(`/api/messages/${delBtn.dataset.deleteMessage}`, { method: 'DELETE' });
           showToast('تم حذف الرسالة.', 'success');
@@ -864,6 +1040,25 @@
           method: 'PUT',
           body: JSON.stringify(payload)
         });
+        showToast(res.message, 'success');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // Admin profile (display name + login username)
+    els.profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const res = await api('/api/admin/profile', {
+          method: 'PUT',
+          body: JSON.stringify({
+            name: document.getElementById('pf-name').value.trim(),
+            username: document.getElementById('pf-username').value.trim()
+          })
+        });
+        state.admin = res.admin;
+        updateAdminIdentity(res.admin);
         showToast(res.message, 'success');
       } catch (err) {
         showToast(err.message, 'error');
@@ -892,9 +1087,54 @@
       }
     });
 
-    // Escape closes modals
+    // Show/hide password toggles
+    document.querySelectorAll('.pw-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.innerHTML = show ? EYE_CLOSED_SVG : EYE_OPEN_SVG;
+        input.focus();
+      });
+    });
+
+    // Caps Lock warning on the login password field
+    const capsHandler = (e) => {
+      if (!e.getModifierState) return;
+      els.capsLockHint.classList.toggle('hidden', !e.getModifierState('CapsLock'));
+    };
+    els.loginPassword.addEventListener('keyup', capsHandler);
+    els.loginPassword.addEventListener('keydown', capsHandler);
+    els.loginPassword.addEventListener('blur', () => els.capsLockHint.classList.add('hidden'));
+
+    // Password strength meter
+    document.getElementById('pw-new').addEventListener('input', (e) => updatePasswordStrength(e.target.value));
+
+    // Topbar date (Arabic)
+    els.topbarDate.textContent = new Date().toLocaleDateString('ar', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    // Refresh current section data
+    document.getElementById('refresh-section-btn').addEventListener('click', (e) => {
+      const btn = e.currentTarget;
+      btn.classList.remove('spinning');
+      void btn.offsetWidth;
+      btn.classList.add('spinning');
+      switchSection(state.currentSection);
+    });
+
+    // Escape closes modals (confirm dialog first)
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        if (pendingConfirmResolve) {
+          pendingConfirmResolve(false);
+          return;
+        }
         els.productEditorModal.classList.remove('open');
         els.orderDetailModal.classList.remove('open');
       }

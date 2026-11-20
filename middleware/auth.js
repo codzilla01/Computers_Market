@@ -43,6 +43,7 @@ function verifyToken(token) {
 function createSessionToken(admin) {
   return signPayload({
     id: admin.id,
+    username: admin.username,
     email: admin.email,
     name: admin.name,
     exp: Date.now() + SESSION_TTL_MS
