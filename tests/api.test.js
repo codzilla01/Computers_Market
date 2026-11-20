@@ -89,15 +89,16 @@ test('Admin routes reject unauthenticated access and login sets valid session co
 
   const badLogin = await request('/api/admin/login', {
     method: 'POST',
-    body: { email: 'admin@computers-market.sa', password: 'WrongPassword' }
+    body: { username: 'admin', password: 'WrongPassword' }
   });
   assert.equal(badLogin.status, 401);
 
   const login = await request('/api/admin/login', {
     method: 'POST',
-    body: { email: 'admin@computers-market.sa', password: 'Admin@2026' }
+    body: { username: 'admin', password: 'Admin@2026' }
   });
   assert.equal(login.status, 200);
+  assert.equal(login.json.admin.username, 'admin');
   const setCookie = login.headers.get('set-cookie');
   assert.ok(setCookie && setCookie.includes('cm_admin_session='));
   adminCookie = setCookie.split(';')[0];
@@ -105,6 +106,54 @@ test('Admin routes reject unauthenticated access and login sets valid session co
   const stats = await request('/api/admin/stats', { auth: true });
   assert.equal(stats.status, 200);
   assert.ok(stats.json.kpis.total_products >= 9);
+});
+
+test('Admin profile update, username validation & case-insensitive username login', async () => {
+  const emptyName = await request('/api/admin/profile', {
+    method: 'PUT',
+    auth: true,
+    body: { name: '', username: 'admin' }
+  });
+  assert.equal(emptyName.status, 400);
+
+  const shortUsername = await request('/api/admin/profile', {
+    method: 'PUT',
+    auth: true,
+    body: { name: 'مدير', username: 'ab' }
+  });
+  assert.equal(shortUsername.status, 400);
+
+  const updated = await request('/api/admin/profile', {
+    method: 'PUT',
+    auth: true,
+    body: { name: 'مدير تجريبي', username: 'temp-admin' }
+  });
+  assert.equal(updated.status, 200);
+  assert.equal(updated.json.admin.username, 'temp-admin');
+  assert.equal(updated.json.admin.name, 'مدير تجريبي');
+
+  // Login works with the new username (case-insensitive)
+  const relogin = await request('/api/admin/login', {
+    method: 'POST',
+    body: { username: 'TEMP-ADMIN', password: 'Admin@2026' }
+  });
+  assert.equal(relogin.status, 200);
+  assert.equal(relogin.json.admin.username, 'temp-admin');
+
+  // Old username no longer works
+  const staleLogin = await request('/api/admin/login', {
+    method: 'POST',
+    body: { username: 'admin', password: 'Admin@2026' }
+  });
+  assert.equal(staleLogin.status, 401);
+
+  const restored = await request('/api/admin/profile', {
+    method: 'PUT',
+    auth: true,
+    body: { name: 'مدير المتجر', username: 'admin' }
+  });
+  assert.equal(restored.status, 200);
+  assert.equal(restored.json.admin.username, 'admin');
 });
 
 test('Admin Product CRUD (create, update, quick stock, delete)', async () => {

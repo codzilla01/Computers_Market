@@ -24,12 +24,26 @@
 
       <form id="login-form">
         <div class="form-group">
-          <label for="login-email">البريد الإلكتروني</label>
-          <input type="email" id="login-email" required placeholder="admin@computers-market.sa" autocomplete="username">
+          <label for="login-username">اسم المستخدم</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="login-username" class="has-icon" required placeholder="admin" autocomplete="username">
+          </div>
         </div>
         <div class="form-group">
           <label for="login-password">كلمة المرور</label>
-          <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+          <div class="input-icon-wrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="login-password" class="has-icon has-toggle" required placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="pw-toggle" data-target="login-password" aria-label="إظهار أو إخفاء كلمة المرور">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="caps-hint hidden" id="caps-lock-hint">⚠ تنبيه: زر Caps Lock مفعّل</div>
         </div>
         <div class="login-error hidden" id="login-error"></div>
         <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn">تسجيل الدخول</button>
@@ -37,12 +51,12 @@
 
       <div class="demo-creds">
         <div><strong>بيانات الدخول الافتراضية:</strong></div>
-        <div dir="ltr" class="ltr-mono">admin@computers-market.sa &nbsp;|&nbsp; Admin@2026</div>
+        <div dir="ltr" class="ltr-mono">admin &nbsp;|&nbsp; Admin@2026</div>
         <button type="button" class="link-btn" id="fill-demo-creds">تعبئة تلقائية للتجربة</button>
-        <p class="demo-note">يُرجى تغيير كلمة المرور من قسم الإعدادات قبل الإطلاق الفعلي.</p>
+        <p class="demo-note">يُرجى تغيير اسم المستخدم وكلمة المرور من قسم الإعدادات قبل الإطلاق الفعلي.</p>
       </div>
 
-      <a href="/" class="back-store-link">← العودة إلى واجهة المتجر</a>
+      <a href="/" class="back-store-link">العودة إلى واجهة المتجر →</a>
     </div>
   </section>
 
@@ -98,6 +112,13 @@
       </nav>
 
       <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar" id="sidebar-user-avatar">م</span>
+          <div class="sidebar-user-meta">
+            <strong id="sidebar-user-name">مدير المتجر</strong>
+            <span dir="ltr" id="sidebar-username">@admin</span>
+          </div>
+        </div>
         <a href="/" class="sidebar-link" target="_blank" rel="noopener noreferrer">معاينة المتجر ↗</a>
         <button type="button" class="btn btn-danger-soft btn-full" id="logout-btn">تسجيل الخروج</button>
       </div>
@@ -111,7 +132,11 @@
           <h2 id="section-heading">نظرة عامة</h2>
         </div>
         <div class="topbar-left">
-          <span class="admin-user-pill" id="admin-user-name">مدير المتجر</span>
+          <span class="topbar-date" id="topbar-date"></span>
+          <button type="button" class="icon-btn" id="refresh-section-btn" title="تحديث البيانات" aria-label="تحديث البيانات">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <span class="admin-user-chip"><span class="avatar-circle" id="admin-avatar">م</span><span id="admin-user-name">مدير المتجر</span></span>
         </div>
       </header>
 
@@ -192,6 +217,7 @@
                 <tbody id="products-tbody"></tbody>
               </table>
             </div>
+            <div class="table-footer"><span id="products-count"></span></div>
           </div>
         </section>
 
@@ -229,6 +255,7 @@
                 <tbody id="orders-tbody"></tbody>
               </table>
             </div>
+            <div class="table-footer"><span id="orders-count"></span></div>
           </div>
         </section>
 
@@ -282,6 +309,7 @@
                 <tbody id="coupons-tbody"></tbody>
               </table>
             </div>
+            <div class="table-footer"><span id="coupons-count"></span></div>
           </div>
         </section>
 
@@ -290,6 +318,7 @@
           <div class="panel">
             <div class="panel-header">
               <h3>صندوق رسائل واستفسارات العملاء</h3>
+              <span class="panel-count" id="messages-count"></span>
             </div>
             <div id="messages-list" class="messages-list"></div>
           </div>
@@ -372,22 +401,55 @@
               <button type="submit" class="btn btn-primary">حفظ إعدادات المتجر</button>
             </form>
 
+            <div class="settings-side">
+            <form id="profile-form" class="panel">
+              <div class="panel-header"><h3>بيانات حساب المدير</h3></div>
+              <div class="form-group">
+                <label for="pf-name">الاسم المعروض</label>
+                <input type="text" id="pf-name" required placeholder="مدير المتجر">
+              </div>
+              <div class="form-group">
+                <label for="pf-username">اسم المستخدم (يُستخدم لتسجيل الدخول)</label>
+                <input type="text" id="pf-username" required minlength="3" maxlength="30" placeholder="admin">
+              </div>
+              <p class="hint-text" style="margin-bottom:0.9rem;">اسم المستخدم: أحرف إنجليزية صغيرة وأرقام و ( . _ - ) فقط، من 3 إلى 30 حرفاً.</p>
+              <button type="submit" class="btn btn-primary btn-full">حفظ بيانات الحساب</button>
+            </form>
+
             <form id="password-form" class="panel">
               <div class="panel-header"><h3>تغيير كلمة مرور المدير</h3></div>
               <div class="form-group">
                 <label for="pw-current">كلمة المرور الحالية</label>
-                <input type="password" id="pw-current" required>
+                <div class="input-icon-wrap">
+                  <input type="password" id="pw-current" class="has-toggle" required>
+                  <button type="button" class="pw-toggle" data-target="pw-current" aria-label="إظهار أو إخفاء كلمة المرور">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
               </div>
               <div class="form-group">
                 <label for="pw-new">كلمة المرور الجديدة (8 أحرف على الأقل)</label>
-                <input type="password" id="pw-new" required minlength="8">
+                <div class="input-icon-wrap">
+                  <input type="password" id="pw-new" class="has-toggle" required minlength="8">
+                  <button type="button" class="pw-toggle" data-target="pw-new" aria-label="إظهار أو إخفاء كلمة المرور">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+                <div class="pw-meter"><div class="pw-meter-fill" id="pw-strength"></div></div>
+                <div class="hint-text" id="pw-strength-label">أدخل كلمة مرور قوية تحتوي على أحرف وأرقام ورموز.</div>
               </div>
               <div class="form-group">
                 <label for="pw-confirm">تأكيد كلمة المرور الجديدة</label>
-                <input type="password" id="pw-confirm" required minlength="8">
+                <div class="input-icon-wrap">
+                  <input type="password" id="pw-confirm" class="has-toggle" required minlength="8">
+                  <button type="button" class="pw-toggle" data-target="pw-confirm" aria-label="إظهار أو إخفاء كلمة المرور">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
               </div>
               <button type="submit" class="btn btn-secondary btn-full">تحديث كلمة المرور</button>
             </form>
+            </div>
           </div>
         </section>
       </main>
@@ -512,6 +574,23 @@
         <button type="button" class="icon-btn" id="close-order-detail" aria-label="إغلاق">✕</button>
       </div>
       <div id="order-detail-body" class="modal-body-pad"></div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الإجراءات -->
+  <div class="modal-backdrop" id="confirm-modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-sm">
+      <div class="confirm-body">
+        <div class="confirm-icon">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3 id="confirm-title">تأكيد الإجراء</h3>
+        <p id="confirm-message">هل أنت متأكد من تنفيذ هذا الإجراء؟</p>
+        <div class="confirm-actions">
+          <button type="button" class="btn btn-secondary" id="confirm-cancel-btn">تراجع</button>
+          <button type="button" class="btn btn-danger" id="confirm-ok-btn">تأكيد</button>
+        </div>
+      </div>
     </div>
   </div>
 

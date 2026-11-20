@@ -16,26 +16,26 @@ router.get('/public-settings', (_req, res) => {
   res.json({ settings });
 });
 
-// POST /api/admin/login
+// POST /api/admin/login — username + password authentication
 router.post('/login', (req, res) => {
   const db = getDb();
-  const email = String(req.body?.email || '').trim().toLowerCase();
+  const username = String(req.body?.username || '').trim().toLowerCase();
   const password = String(req.body?.password || '');
 
-  if (!email || !password) {
-    return res.status(400).json({ error: 'يرجى إدخال البريد الإلكتروني وكلمة المرور.' });
+  if (!username || !password) {
+    return res.status(400).json({ error: 'يرجى إدخال اسم المستخدم وكلمة المرور.' });
   }
 
-  const admin = db.prepare('SELECT * FROM admins WHERE LOWER(email) = ?').get(email);
+  const admin = db.prepare('SELECT * FROM admins WHERE LOWER(username) = ?').get(username);
   if (!admin || !bcrypt.compareSync(password, admin.password_hash)) {
-    return res.status(401).json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' });
+    return res.status(401).json({ error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
   }
 
   const token = createSessionToken(admin);
   setSessionCookie(res, token);
 
   res.json({
-    admin: { id: admin.id, email: admin.email, name: admin.name },
+    admin: { id: admin.id, username: admin.username, email: admin.email, name: admin.name },
     message: 'تم تسجيل الدخول بنجاح.'
   });
 });
@@ -51,6 +51,7 @@ router.get('/me', requireAdmin, (req, res) => {
   res.json({
     admin: {
       id: req.admin.id,
+      username: req.admin.username,
       email: req.admin.email,
       name: req.admin.name
     }
@@ -75,6 +76,37 @@ router.post('/password', requireAdmin, (req, res) => {
   const nextHash = bcrypt.hashSync(newPassword, 10);
   db.prepare('UPDATE admins SET password_hash = ? WHERE id = ?').run(nextHash, admin.id);
   res.json({ message: 'تم تغيير كلمة المرور بنجاح.' });
+});
+
+// PUT /api/admin/profile — update display name & login username
+router.put('/profile', requireAdmin, (req, res) => {
+  const db = getDb();
+  const name = String(req.body?.name || '').trim();
+  const username = String(req.body?.username || '').trim().toLowerCase();
+
+  if (!name) {
+    return res.status(400).json({ error: 'يرجى إدخال الاسم المعروض.' });
+  }
+  if (!/^[a-z0-9_.-]{3,30}$/.test(username)) {
+    return res.status(400).json({ error: 'اسم المستخدم يجب أن يكون من 3 إلى 30 حرفاً (أحرف إنجليزية صغيرة وأرقام و . _ - فقط).' });
+  }
+
+  const taken = db
+    .prepare('SELECT id FROM admins WHERE LOWER(username) = ? AND id != ?')
+    .get(username, req.admin.id);
+  if (taken) {
+    return res.status(409).json({ error: 'اسم المستخدم مستخدم بالفعل، اختر اسماً آخر.' });
+  }
+
+  db.prepare('UPDATE admins SET name = ?, username = ? WHERE id = ?').run(name, username, req.admin.id);
+  const admin = db
+    .prepare('SELECT id, username, email, name FROM admins WHERE id = ?')
+    .get(req.admin.id);
+
+  // Refresh the session cookie so the UI picks up the new identity immediately
+  setSessionCookie(res, createSessionToken(admin));
+
+  res.json({ admin, message: 'تم تحديث بيانات حساب المدير بنجاح.' });
 });
 
 // GET /api/admin/stats — dashboard KPIs & analytics
